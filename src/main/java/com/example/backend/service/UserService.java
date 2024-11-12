@@ -6,7 +6,6 @@ import com.example.backend.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import com.example.backend.model.RegistrationMail;
@@ -14,7 +13,6 @@ import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -77,14 +75,13 @@ public class UserService {
     }
 
     public User updateUser(String id, User user) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        User existingUser = null;
-        if (optionalUser.isPresent()) {
-            existingUser = optionalUser.get();
-            existingUser.setName(user.getName());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setPassword(user.getPassword());
-        }
+        User existingUser = userRepository.findById(id).orElseThrow(
+            () -> new RuntimeException()
+        );
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
+        
         return userRepository.save(existingUser);
     }
 
