@@ -40,7 +40,6 @@ public class PostService {
         );
 
         existingPost.setUserId(post.getUserId() != null && !post.getUserId().isEmpty() ? post.getUserId() : existingPost.getUserId());
-        existingPost.setCommentId(post.getCommentId() != null ? post.getCommentId() : existingPost.getCommentId());
         existingPost.setImageUrl(post.getImageUrl() != null && !post.getImageUrl().isEmpty() ? post.getImageUrl() : existingPost.getImageUrl());
         existingPost.setDescription(post.getDescription() != null && !post.getDescription().isEmpty() ? post.getDescription() : existingPost.getDescription());
 
