@@ -1,9 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Comment;
-import com.example.backend.model.Post;
 import com.example.backend.service.CommentService;
-import com.example.backend.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
