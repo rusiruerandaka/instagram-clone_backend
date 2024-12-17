@@ -1,7 +1,6 @@
 package com.example.backend.service;
 
 import com.example.backend.model.Comment;
-import com.example.backend.model.Post;
 import com.example.backend.model.DatabaseSequence;
 import com.example.backend.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
