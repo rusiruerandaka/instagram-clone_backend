@@ -12,7 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 public class Muser {
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
+    private String caption;
+    private String userImage;
 }
