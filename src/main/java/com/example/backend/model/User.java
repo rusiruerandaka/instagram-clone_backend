@@ -1,4 +1,5 @@
-package com.example.backend.model;
+package com.instagram.Instagram.clone.model;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,5 @@ public class User extends Muser{
 
     @Id
     private String user_id;
-
-
 
 }
