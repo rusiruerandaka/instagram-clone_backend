@@ -1,4 +1,4 @@
-package com.instagram.Instagram.clone.model;
+package com.example.backend.model;
 
 
 import lombok.AllArgsConstructor;
