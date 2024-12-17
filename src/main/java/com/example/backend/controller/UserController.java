@@ -1,11 +1,11 @@
-package com.instagram.Instagram.clone.controller;
+package com.example.backend.controller;
 
-import com.instagram.Instagram.clone.model.User;
-import com.instagram.Instagram.clone.repository.UserRepository;
+import com.example.backend.model.User;
+import com.example.backend.repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.instagram.Instagram.clone.service.UserService;
+import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
