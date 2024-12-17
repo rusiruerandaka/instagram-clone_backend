@@ -1,6 +1,7 @@
-package com.example.backend.service;
+package com.instagram.Instagram.clone.service;
 
-import com.example.backend.model.RegistrationMail;
+
+import com.instagram.Instagram.clone.model.RegistrationMail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +40,3 @@ public class MailService {
     }
 
 }
-

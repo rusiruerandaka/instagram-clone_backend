@@ -1,19 +1,15 @@
-package com.example.backend.controller;
+package com.instagram.Instagram.clone.controller;
 
-import com.example.backend.model.User;
-import com.example.backend.repository.UserRepository;
+import com.instagram.Instagram.clone.model.User;
+import com.instagram.Instagram.clone.repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.backend.service.UserService;
+import com.instagram.Instagram.clone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
@@ -57,6 +53,11 @@ public class UserController {
         return ResponseEntity.ok(updateUser);
     }
 
+    @GetMapping("/getUserByEmail/{email}")
+    public User findByEmail(@PathVariable String email){
+        return userRepository.findByEmail(email);
+    }
+
     @DeleteMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable String id){
         return userService.deleteUser(id);
@@ -66,6 +67,4 @@ public class UserController {
     public List<User> searchUser(@RequestParam("name") String name){
         return userRepository.findByNameContainingIgnoreCase(name);
     }
-
-
 }

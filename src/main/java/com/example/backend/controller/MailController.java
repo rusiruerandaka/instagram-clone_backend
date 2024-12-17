@@ -1,8 +1,8 @@
-package com.example.backend.controller;
+package com.instagram.Instagram.clone.controller;
 
 
-import com.example.backend.model.RegistrationMail;
-import com.example.backend.service.MailService;
+import com.instagram.Instagram.clone.model.RegistrationMail;
+import com.instagram.Instagram.clone.service.MailService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
