@@ -1,6 +1,10 @@
 package com.example.backend.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,11 +37,14 @@ public class FileStoreController {
     }
 
     @GetMapping("/download/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName) throws IOException {
-        byte[] imageData = fileStoreService.downloadImage(fileName);
+	public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
+		byte[] imageData=fileStoreService.downloadImageFromFileSystem(fileName);
+		return ResponseEntity.status(HttpStatus.OK)
+				.contentType(MediaType.valueOf("image/png"))
+				.body(imageData);
 
-        return ResponseEntity.status(HttpStatus.OK)
-            .contentType(MediaType.valueOf("image/png"))
-            .body(imageData);
-    }  
+	}
+    
+
+
 }
