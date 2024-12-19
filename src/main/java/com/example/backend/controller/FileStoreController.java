@@ -29,21 +29,53 @@ public class FileStoreController {
     @Autowired
     private FileStoreService fileStoreService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadImage(@RequestParam("image")MultipartFile file) throws IOException {
-        String uploadImage = fileStoreService.uploadImage(file);
+    @PostMapping("/uploadPost")
+    public ResponseEntity<?> uploadPostImage(@RequestParam("image")MultipartFile file) throws IOException {
+        String uploadImage = fileStoreService.uploadPostImage(file);
         
         return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
     }
 
-    @GetMapping("/download/{fileName}")
-	public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
-		byte[] imageData=fileStoreService.downloadImageFromFileSystem(fileName);
+    @GetMapping("/downloadPost/{fileName}")
+	public ResponseEntity<?> downloadPostImage(@PathVariable String fileName) throws IOException {
+		byte[] imageData=fileStoreService.downloadPostImage(fileName);
 		return ResponseEntity.status(HttpStatus.OK)
 				.contentType(MediaType.valueOf("image/png"))
 				.body(imageData);
 
 	}   
+
+    @PostMapping("/uploadStory")
+    public ResponseEntity<?> uploadStoryImage(@RequestParam("image")MultipartFile file) throws IOException {
+        String uploadImage = fileStoreService.uploadStoryImage(file);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+    }
+
+    @GetMapping("/downloadStory/{fileName}")
+	public ResponseEntity<?> downloadStoryImage(@PathVariable String fileName) throws IOException {
+		byte[] imageData=fileStoreService.downloadStoryImage(fileName);
+		return ResponseEntity.status(HttpStatus.OK)
+				.contentType(MediaType.valueOf("image/png"))
+				.body(imageData);
+
+	}  
+
+    @PostMapping("/uploadUser")
+    public ResponseEntity<?> uploadUserImage(@RequestParam("image")MultipartFile file) throws IOException {
+        String uploadImage = fileStoreService.uploadUserImage(file);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+    }
+
+    @GetMapping("/downloadUser/{fileName}")
+	public ResponseEntity<?> downloadUserImage(@PathVariable String fileName) throws IOException {
+		byte[] imageData=fileStoreService.downloadUserImage(fileName);
+		return ResponseEntity.status(HttpStatus.OK)
+				.contentType(MediaType.valueOf("image/png"))
+				.body(imageData);
+
+	}  
     
 
 
