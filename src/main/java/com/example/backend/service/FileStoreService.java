@@ -13,21 +13,23 @@ import org.springframework.web.multipart.MultipartFile;
     @Service
     public class FileStoreService {
 
-        private final String FOLDER_PATH = System.getProperty("user.dir") + "/uploads/images/";
+        private final String FOLDER_PATH_POSTS = System.getProperty("user.dir") + "/uploads/posts/";
+        private final String FOLDER_PATH_STORY = System.getProperty("user.dir") + "/uploads/stories/";
+        private final String FOLDER_PATH_USERS = System.getProperty("user.dir") + "/uploads/users/";
         //private final String FOLDER_PATH = "C:\\Users\\thara\\Downloads\\Backend\\";
 
-        public String uploadImage(MultipartFile file) throws IOException {
+        public String uploadPostImage(MultipartFile file) throws IOException {
 
-            File directory = new File(FOLDER_PATH);
+            File directory = new File(FOLDER_PATH_POSTS);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
 
             String originalFilename = file.getOriginalFilename();
             String fileExtension = getFileExtension(originalFilename);
-            String uniqueFileName = generateUniqueFileName(originalFilename, fileExtension);
+            String uniqueFileName = generateUniqueFileName(originalFilename, fileExtension, "post");
 
-            String filePath=FOLDER_PATH+uniqueFileName;
+            String filePath=FOLDER_PATH_POSTS + uniqueFileName;
 
             file.transferTo(new File(filePath));
 
@@ -37,12 +39,68 @@ import org.springframework.web.multipart.MultipartFile;
         }
         
 
-        public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
-
-            System.out.println("\n\n\n\n\n\n"+System.getProperty("user.dir")+"\n\n\n\n\n\n");
+        public byte[] downloadPostImage(String fileName) throws IOException {
 
             //Optional<FileStore> fileData = fileStoreRepository.findByName(fileName);
-            String filePath=FOLDER_PATH+fileName;
+            String filePath=FOLDER_PATH_POSTS + fileName;
+            byte[] images = Files.readAllBytes(new File(filePath).toPath());
+            return images;
+        }
+
+        public String uploadStoryImage(MultipartFile file) throws IOException {
+
+            File directory = new File(FOLDER_PATH_STORY);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = getFileExtension(originalFilename);
+            String uniqueFileName = generateUniqueFileName(originalFilename, fileExtension, "story");
+
+            String filePath=FOLDER_PATH_STORY + uniqueFileName;
+
+            file.transferTo(new File(filePath));
+
+            {
+                return uniqueFileName;
+            }
+        }
+        
+
+        public byte[] downloadStoryImage(String fileName) throws IOException {
+
+            //Optional<FileStore> fileData = fileStoreRepository.findByName(fileName);
+            String filePath=FOLDER_PATH_STORY + fileName;
+            byte[] images = Files.readAllBytes(new File(filePath).toPath());
+            return images;
+        }
+
+        public String uploadUserImage(MultipartFile file) throws IOException {
+
+            File directory = new File(FOLDER_PATH_USERS);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = getFileExtension(originalFilename);
+            String uniqueFileName = generateUniqueFileName(originalFilename, fileExtension, "user");
+
+            String filePath=FOLDER_PATH_USERS + uniqueFileName;
+
+            file.transferTo(new File(filePath));
+
+            {
+                return uniqueFileName;
+            }
+        }
+        
+
+        public byte[] downloadUserImage(String fileName) throws IOException {
+
+            //Optional<FileStore> fileData = fileStoreRepository.findByName(fileName);
+            String filePath=FOLDER_PATH_USERS + fileName;
             byte[] images = Files.readAllBytes(new File(filePath).toPath());
             return images;
         }
@@ -50,10 +108,10 @@ import org.springframework.web.multipart.MultipartFile;
 
         // Custom methods
         // Generate unique file name
-        private String generateUniqueFileName(String originalFileName, String fileExtension) {
+        private String generateUniqueFileName(String originalFileName, String fileExtension, String type) {
             String datePart = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()); // Date: yyyyMMddHHmmss
             String randomPart = UUID.randomUUID().toString().substring(0, 8); // Random code: first 8 characters of UUID
-            return originalFileName + "_" + datePart + "_" + randomPart + fileExtension;
+            return originalFileName + "_" + datePart + "_" + randomPart + "_" + type + fileExtension;
         }
 
         // Extract file extension

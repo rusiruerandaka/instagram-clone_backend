@@ -43,7 +43,7 @@ public class FileStoreController {
 				.contentType(MediaType.valueOf("image/png"))
 				.body(imageData);
 
-	}
+	}   
     
 
 
