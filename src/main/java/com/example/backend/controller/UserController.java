@@ -37,7 +37,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());
         }}
 
-    @GetMapping("/getAllUser")
+    @GetMapping("/getAllUsers")
     public List<User> getUser(){
         return (List<User>) userService.getUser();
     }
@@ -63,7 +63,7 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
-    @GetMapping("/searchUser")
+    @GetMapping("/searchUser/{name}")
     public List<User> searchUser(@RequestParam("name") String name){
         return userRepository.findByFirstNameContainingIgnoreCase(name);
     }
