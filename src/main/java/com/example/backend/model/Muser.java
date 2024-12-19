@@ -18,6 +18,6 @@ public class Muser {
     private String password;
     private String caption;
     private String userImage;
-    private String folloers[];
+    private String followers[];
     private String following[];
 }
