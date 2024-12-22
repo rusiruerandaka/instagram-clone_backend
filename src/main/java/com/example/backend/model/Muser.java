@@ -3,6 +3,10 @@ package com.example.backend.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -20,4 +24,5 @@ public class Muser {
     private String userImage;
     private String followers[];
     private String following[];
+    private String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 }
