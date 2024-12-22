@@ -30,4 +30,16 @@ public class StoryController {
     public ResponseEntity<Story> addStory(@RequestBody Story story){
         return new ResponseEntity<Story>(storyService.addStory(story), HttpStatus.CREATED);
     }
+
+    @PutMapping("/watchedStory/{id}")
+    public ResponseEntity<?> watchedStory(@PathVariable String id) {
+        try {
+            boolean updated = storyService.watchedStory(id);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        }
+    }
 }
