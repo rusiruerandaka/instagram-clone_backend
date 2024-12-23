@@ -30,4 +30,22 @@ public class PostController {
     public ResponseEntity<Post> addPost(@RequestBody Post post){
         return new ResponseEntity<Post>(postService.addPost(post), HttpStatus.CREATED);
     }
+
+    @PostMapping("/incrementLikes/{postId}")
+    public ResponseEntity<?> incrementLikes(@PathVariable String postId){
+        try{
+            return ResponseEntity.ok(postService.incrementLikes(postId));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to increase likes: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/decrementLikes/{postId}")
+    public ResponseEntity<?> decrementLikes(@PathVariable String postId){
+        try{
+            return ResponseEntity.ok(postService.decrementLikes(postId));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to decrease likes: " + e.getMessage());
+        }
+    }
 }

@@ -54,6 +54,32 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    public String incrementLikes(String postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new RuntimeException(postId)
+        );
+
+        post.setLikeCount(post.getLikeCount() + 1);
+        return "Like Count Increased";
+    }
+
+    public String decrementLikes(String postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new RuntimeException(postId)
+        );
+
+        int likeCount = 0;
+        if(post.getLikeCount() == 0){
+            likeCount = 0;
+        } 
+        else{
+            likeCount = post.getLikeCount() - 1;
+        }
+
+        post.setLikeCount(likeCount);
+        return "Like Count Decreased";
+    }
+
     @Autowired
     private MongoOperations mongoOperations;
 
