@@ -107,5 +107,20 @@ public class UserService {
         return userRepository.findByFirstNameContainingIgnoreCase(name);
     }
 
+    public User addLikes(String userId, String postId) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        user.getLikedPosts().add(postId);
+        return userRepository.save(user);
+    }
+
+    public User removeLikes(String userId, String postId) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        user.getLikedPosts().remove(postId);
+        return userRepository.save(user);
+    }
 
 }

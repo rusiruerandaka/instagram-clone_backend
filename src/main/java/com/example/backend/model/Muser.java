@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,5 +26,6 @@ public class Muser {
     private String userImage;
     private String followers[];
     private String following[];
+    private List<String> likedPosts = new ArrayList<>();
     private String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 }
