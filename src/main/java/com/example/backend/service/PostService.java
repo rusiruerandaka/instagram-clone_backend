@@ -60,6 +60,7 @@ public class PostService {
         );
 
         post.setLikeCount(post.getLikeCount() + 1);
+        postRepository.save(post);
         return "Like Count Increased";
     }
 
@@ -77,6 +78,7 @@ public class PostService {
         }
 
         post.setLikeCount(likeCount);
+        postRepository.save(post);
         return "Like Count Decreased";
     }
 
