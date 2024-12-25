@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.User;
+import com.example.backend.util.JwtTokenUtil;
 import com.example.backend.repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -20,12 +22,15 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     private UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(JwtTokenUtil jwtTokenUtil, UserService userService) {
+
         this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @PostMapping("/addUser")
@@ -36,6 +41,20 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());
         }}
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> loginRequest) {
+        String email = loginRequest.get("email");
+        String password = loginRequest.get("password");
+
+        User user = userService.getUserByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            String token = jwtTokenUtil.generateToken(user.getEmail());
+            return ResponseEntity.ok(Map.of("token", token));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    }
+
 
     @GetMapping("/getAllUsers")
     public List<User> getUser(){
