@@ -1,8 +1,12 @@
 package com.example.backend.util;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -38,8 +42,16 @@ public class JwtTokenUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        // Decode the secret key into bytes
+        Key signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(signingKey) // Pass the key as a Key object
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
+
 
     public boolean isTokenValid(String token, String username) {
         final String extractedUsername = extractUsername(token);
@@ -48,5 +60,10 @@ public class JwtTokenUtil {
 
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
+    }
+
+    public boolean validateToken(String jwt, UserDetails userDetails) {
+        final String username = extractUsername(jwt);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(jwt));
     }
 }
