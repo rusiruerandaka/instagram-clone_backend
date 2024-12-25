@@ -20,4 +20,5 @@ public class Muser {
     private String userImage;
     private String folloers[];
     private String following[];
+
 }
