@@ -1,4 +1,6 @@
-import com.example.backend.config.JwtAuthenticationFilter;
+package com.example.backend.config;
+
+import com.example.security.JwtAuthenticationFilter; // Use the correct package
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
