@@ -10,30 +10,55 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 public class Muser {
 
-    @Getter
-    @Setter
+
     private String firstName;
-    @Getter
-    @Setter
     private String lastName;
-    @Getter
-    @Setter
     private String email;
-    @Getter
-    @Setter
     private String password;
-    @Getter
-    @Setter
     private String caption;
-    @Getter
-    @Setter
     private String userImage;
-    @Getter
-    @Setter
     private String folloers[];
-    @Getter
-    @Setter
     private String following[];
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
 
     @Override
     public String toString() {
