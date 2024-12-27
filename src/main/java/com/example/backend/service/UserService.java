@@ -6,6 +6,10 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.model.RegistrationMail;
 import com.example.backend.model.User;
@@ -28,10 +32,32 @@ public class UserService {
     private MailService mailService;
 
     @Autowired
+    private JWTServices jwtServices;
+
+    @Autowired
     private final UserRepository userRepository;
 
     @Autowired
     private MongoOperations mongoOperations;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+    public String verify(User user) {
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser == null) {
+            return "User not found";
+        }
+        if (encoder.matches(user.getPassword(), existingUser.getPassword())) {
+            return jwtServices.generateToken(existingUser);
+        }
+        return "Invalid password";
+    }
+
+    public User register(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return user;
+    }
 
 
     public UserService(UserRepository userRepository) {

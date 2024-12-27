@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil {
 
-    private final String SECRET_KEY = "your_secret_key";
+    private final String SECRET_KEY = "u8JH3Gm+fqA6dDFRTY1WZ9L6HHTXQWmJ37jz6DmjJdY=";
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -42,11 +42,10 @@ public class JwtTokenUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        // Decode the secret key into bytes
-        Key signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+        Key signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)); // Decode secret key
 
         return Jwts.parserBuilder()
-                .setSigningKey(signingKey) // Pass the key as a Key object
+                .setSigningKey(signingKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

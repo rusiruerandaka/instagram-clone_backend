@@ -33,6 +33,17 @@ public class UserController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
+    @PostMapping("/signup")
+    public User signUp(@RequestBody User user) {
+        return userService.addUser(user);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+        return userService.verify(user);
+    }
+
+
     @PostMapping("/addUser")
     public ResponseEntity<?> addUser(@RequestBody User user){
         try {
