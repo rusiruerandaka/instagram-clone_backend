@@ -40,17 +40,10 @@ public class UserController {
         return userService.verify(user);
     }
 
-
-    @PostMapping("/addUser")
-    public ResponseEntity<?> addUser(@RequestBody User user){
-        try {
-            User createdUser = userService.addUser(user);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());
-        }}
-
-
+    @GetMapping("/logout")
+    public String logout() {
+        return "Logged out";
+    }
 
     @GetMapping("/getAllUsers")
     public List<User> getUser(){
