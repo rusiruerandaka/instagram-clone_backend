@@ -34,12 +34,12 @@ public class JWTService {
         }
     }
 
-    public String generateToken(String username){
+    public String generateToken(String email){
 
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(getKey())
@@ -63,11 +63,11 @@ public class JWTService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getKey())
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -93,4 +93,7 @@ public class JWTService {
     }
 
 
+    public String extractEmail(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 }

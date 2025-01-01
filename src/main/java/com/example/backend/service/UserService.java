@@ -18,6 +18,7 @@ import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -32,25 +33,34 @@ public class UserService {
     private MailService mailService;
 
     @Autowired
-    private JWTService jwtServices;
+    private JWTService jwtService;
 
     @Autowired
-    private final UserRepository userRepository;
+    private AuthenticationManager authmanager;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private MongoOperations mongoOperations;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
 
     public String verify(User user) {
-        User existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser == null) {
-            return "User not found";
-        }
-        if (encoder.matches(user.getPassword(), existingUser.getPassword())) {
-            return jwtServices.generateToken(String.valueOf(existingUser));
-        }
-        return "Invalid password";
+
+            Authentication authentication = authmanager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+            );
+
+            if (authentication.isAuthenticated()) {
+                return jwtService.generateToken(user.getEmail());
+            } else {
+                return "Authentication failed";
+            }
+
+
     }
 
     public User register(User user) {
@@ -89,8 +99,9 @@ public class UserService {
         return savedUser;
     }
 
-    public User getUserById(String id){
-        return userRepository.findById(id).orElse(null);
+    public Optional<User> getUserById(String id){
+
+        return userRepository.findById(id);
     }
 
     public List<User> getUser() {
@@ -108,7 +119,7 @@ public class UserService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
+        existingUser.setPassword(encoder.encode(user.getPassword()));
         existingUser.setCaption(user.getCaption());
         existingUser.setUserImage(user.getUserImage());
         
