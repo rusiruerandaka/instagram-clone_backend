@@ -72,6 +72,11 @@ public class UserController {
         return followService.followUser(userId, followUserId);
     }
 
+    @PostMapping("/{userId}/unfollow/{unfollowUserId}")
+    public User unfollowUser(@PathVariable String userId, @PathVariable String unfollowUserId) {
+        return followService.unfollowUser(userId, unfollowUserId);
+    }
+
     @GetMapping("/getAllUsers")
     public List<User> getUser(){
         return (List<User>) userService.getUser();
