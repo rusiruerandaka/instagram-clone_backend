@@ -30,7 +30,7 @@ public class Muser {
     private String userImage;
     @Getter
     @Setter
-    private String folloers[];
+    private String followers[];
     @Getter
     @Setter
     private String following[];
@@ -44,7 +44,7 @@ public class Muser {
                 ", password='" + password + '\'' +
                 ", caption='" + caption + '\'' +
                 ", userImage='" + userImage + '\'' +
-                ", folloers='" + folloers + '\'' +
+                ", followers='" + followers + '\'' +
                 ", following='" + following + '\'' +
                 '}';
     }
