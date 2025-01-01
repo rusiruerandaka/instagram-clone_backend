@@ -32,7 +32,7 @@ public class UserService {
     private MailService mailService;
 
     @Autowired
-    private JWTServices jwtServices;
+    private JWTService jwtServices;
 
     @Autowired
     private final UserRepository userRepository;
@@ -48,7 +48,7 @@ public class UserService {
             return "User not found";
         }
         if (encoder.matches(user.getPassword(), existingUser.getPassword())) {
-            return jwtServices.generateToken(existingUser);
+            return jwtServices.generateToken(String.valueOf(existingUser));
         }
         return "Invalid password";
     }
