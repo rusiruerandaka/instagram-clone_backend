@@ -22,4 +22,11 @@ public class User extends Muser{
     @Id
     private String user_id;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id='" + user_id + '\'' +
+                '}';
+    }
+
 }
