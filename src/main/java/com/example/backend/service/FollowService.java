@@ -34,4 +34,24 @@ public class FollowService implements FollowServiceInterface {
 
         return user;
     }
+
+    @Override
+    public User unfollowUser(String userId, String unfollowUserId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User unfollowUser = userRepository.findById(unfollowUserId).orElseThrow(() -> new RuntimeException("User to unfollow not found"));
+
+        Set<String> following = new HashSet<>(Arrays.asList(user.getFollowing()));
+        Set<String> followers = new HashSet<>(Arrays.asList(unfollowUser.getFollowers()));
+
+        following.remove(unfollowUserId);
+        followers.remove(userId);
+
+        user.setFollowing(following.toArray(new String[0]));
+        unfollowUser.setFollowers(followers.toArray(new String[0]));
+
+        userRepository.save(user);
+        userRepository.save(unfollowUser);
+
+        return user;
+    }
 }
