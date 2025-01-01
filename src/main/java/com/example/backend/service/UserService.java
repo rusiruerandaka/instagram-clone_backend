@@ -62,22 +62,29 @@ public class UserService {
 
 
     }
-
-    public User register(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return user;
-    }
-
-
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    public User register(User user) {
+        user.setUser_id(generateSequence(User.SEQUENCE_NAME));
+        user.setPassword(encoder.encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
+
+        RegistrationMail registrationMail = new RegistrationMail();
+        registrationMail.setSubject("Registration Confirmation");
+        registrationMail.setName(savedUser.getFirstName() + " " + savedUser.getLastName());
+
+        return user;
+    }
+
+
+
+
 
     public User addUser(User user) {
         user.setUser_id(generateSequence(User.SEQUENCE_NAME));
-
+        user.setPassword(encoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
 
         RegistrationMail registrationMail = new RegistrationMail();
@@ -133,12 +140,15 @@ public class UserService {
 
 
     public String generateSequence(String seqName) {
-        DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
-                new Update().inc("seq",1),
+        DatabaseSequence counter = mongoOperations.findAndModify(
+                query(where("_id").is(seqName)),
+                new Update().inc("seq", 1),
                 options().returnNew(true).upsert(true),
-                DatabaseSequence.class);
-        return "U" + (!Objects.isNull(counter)?counter.getSeq():1);
+                DatabaseSequence.class
+        );
+        return "U" + (!Objects.isNull(counter) ? counter.getSeq() : 1);
     }
+
 
     public List<User> searchByName(String name){
         return userRepository.findByFirstNameContainingIgnoreCase(name);
