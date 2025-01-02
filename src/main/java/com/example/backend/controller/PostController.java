@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @CrossOrigin
 @RestController
@@ -47,5 +50,10 @@ public class PostController {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to decrease likes: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/getLikeCount/{postId}")
+    public Integer getLikeCount(@PathVariable String postId) {
+        return postService.getLikeCount(postId);
     }
 }

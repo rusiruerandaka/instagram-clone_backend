@@ -82,6 +82,14 @@ public class PostService {
         return "Like Count Decreased";
     }
 
+    public Integer getLikeCount(String postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new RuntimeException(postId)
+        );
+
+        return post.getLikeCount();
+    }
+
     @Autowired
     private MongoOperations mongoOperations;
 
