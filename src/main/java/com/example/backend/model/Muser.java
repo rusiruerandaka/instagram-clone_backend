@@ -28,6 +28,7 @@ public class Muser {
     @Getter
     @Setter
     private String userImage;
+
     @Getter
     @Setter
     private String followers[];
@@ -48,8 +49,6 @@ public class Muser {
                 ", following='" + following + '\'' +
                 '}';
     }
-
-
 }
 
 

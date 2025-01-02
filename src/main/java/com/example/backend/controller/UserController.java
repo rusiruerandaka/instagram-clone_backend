@@ -82,4 +82,24 @@ public class UserController {
     public List<User> searchUser(@RequestParam("name") String name){
         return userRepository.findByFirstNameContainingIgnoreCase(name);
     }
+
+    @PostMapping("/addLikes/{userId}/{postId}")
+    public ResponseEntity<?> addLikes(@PathVariable String userId, @PathVariable String postId){
+        try {
+            User user = userService.addLikes(userId, postId);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add likes: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/removeLikes/{userId}/{postId}")
+    public ResponseEntity<?> removeLikes(@PathVariable String userId, @PathVariable String postId){
+        try {
+            User user = userService.removeLikes(userId, postId);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove likes: " + e.getMessage());
+        }
+    }
 }
