@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @CrossOrigin
@@ -55,5 +54,24 @@ public class PostController {
     @GetMapping("/getLikeCount/{postId}")
     public Integer getLikeCount(@PathVariable String postId) {
         return postService.getLikeCount(postId);
+    }
+
+    @DeleteMapping("/deletePost/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable String id){
+        try{
+            postService.deletePost(id);
+            return ResponseEntity.ok("Post deleted successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete post: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/editPost/{id}")
+    public ResponseEntity<?> editPost(@PathVariable String id, @RequestBody Post post){
+        try{
+            return ResponseEntity.ok(postService.editPost(id, post));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to edit post: " + e.getMessage());
+        }
     }
 }

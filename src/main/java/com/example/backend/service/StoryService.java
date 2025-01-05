@@ -58,4 +58,13 @@ public class StoryService {
 
         return true;
     }
+
+    public String deleteStory(String id){
+        storyRepository.findById(id).orElseThrow(
+            () -> new RuntimeException(id)
+        );
+
+        storyRepository.deleteById(id);
+        return "Story deleted successfully";
+    }
 }

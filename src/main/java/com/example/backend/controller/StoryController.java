@@ -42,4 +42,14 @@ public class StoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
+
+    @DeleteMapping("/deleteStory/{id}")
+    public ResponseEntity<?> deleteStory(@PathVariable String id){
+        try{
+            storyService.deleteStory(id);
+            return ResponseEntity.ok("Story deleted successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete story: " + e.getMessage());
+        }
+    }
 }
