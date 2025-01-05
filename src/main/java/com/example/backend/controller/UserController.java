@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -19,14 +20,26 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
+
 
     @Autowired
     private UserRepository userRepository;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+
+        User createduser = userService.register(user);
+        return new ResponseEntity<>(createduser, HttpStatus.CREATED);
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+
+        return userService.verify(user);
+    }
+
 
     @PostMapping("/addUser")
     public ResponseEntity<?> addUser(@RequestBody User user){
@@ -37,13 +50,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());
         }}
 
+
+
     @GetMapping("/getAllUsers")
     public List<User> getUser(){
         return (List<User>) userService.getUser();
     }
 
     @GetMapping("/getUserById/{id}")
-    public User findById(@PathVariable String id){
+    public Optional<User> findById(@PathVariable String id){
         return userService.getUserById(id);
     }
 

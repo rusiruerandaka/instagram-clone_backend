@@ -1,14 +1,6 @@
 package com.example.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -18,14 +10,45 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 public class Muser {
 
+    @Getter
+    @Setter
     private String firstName;
+    @Getter
+    @Setter
     private String lastName;
+    @Getter
+    @Setter
     private String email;
+    @Getter
+    @Setter
     private String password;
+    @Getter
+    @Setter
     private String caption;
+    @Getter
+    @Setter
     private String userImage;
+
+    @Getter
+    @Setter
     private String followers[];
+    @Getter
+    @Setter
     private String following[];
-    private List<String> likedPosts = new ArrayList<>();
-    private String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", caption='" + caption + '\'' +
+                ", userImage='" + userImage + '\'' +
+                ", followers='" + followers + '\'' +
+                ", following='" + following + '\'' +
+                '}';
+    }
 }
+
+
