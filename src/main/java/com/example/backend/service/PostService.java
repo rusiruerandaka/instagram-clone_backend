@@ -90,6 +90,21 @@ public class PostService {
         return post.getLikeCount();
     }
 
+    public String editPost(String id, Post post){
+        Post existingPost = postRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("Post not found")
+        );
+
+        existingPost.setUserId(post.getUserId() != null && !post.getUserId().isEmpty() ? post.getUserId() : existingPost.getUserId());
+        existingPost.setImageUrl(post.getImageUrl() != null && !post.getImageUrl().isEmpty() ? post.getImageUrl() : existingPost.getImageUrl());
+        existingPost.setDescription(post.getDescription() != null && !post.getDescription().isEmpty() ? post.getDescription() : existingPost.getDescription());
+
+        postRepository.save(existingPost);
+        return "Post updated successfully";
+
+    }
+
+
     @Autowired
     private MongoOperations mongoOperations;
 
