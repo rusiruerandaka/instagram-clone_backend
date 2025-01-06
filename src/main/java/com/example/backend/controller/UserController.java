@@ -27,19 +27,6 @@ public class UserController {
     private UserRepository userRepository;
 
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-
-        User createduser = userService.register(user);
-        return new ResponseEntity<>(createduser, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestBody User user) {
-
-        return userService.verify(user);
-    }
-
 
     @PostMapping("/addUser")
     public ResponseEntity<?> addUser(@RequestBody User user){
