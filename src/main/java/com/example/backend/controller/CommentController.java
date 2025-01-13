@@ -30,4 +30,10 @@ public class CommentController {
     public ResponseEntity<Comment> addComment(@RequestBody Comment comment){
         return new ResponseEntity<Comment>(commentService.addComment(comment), HttpStatus.CREATED);
     }
+
+    // Get Comments according to posts
+    @GetMapping("/getCommentByPostId/{postId}")
+    public List<Comment> getCommentByPostId(@PathVariable String postId){
+        return commentService.getCommentByPostId(postId);
+    }
 }

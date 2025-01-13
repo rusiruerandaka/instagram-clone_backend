@@ -54,6 +54,10 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+    public List<Comment> getCommentByPostId(String postId){
+        return commentRepository.getCommentByPostId(postId);
+    }
+
     @Autowired
     private MongoOperations mongoOperations;
 
