@@ -42,29 +42,6 @@ public class UserService {
     public User addUser(User user) {
         user.setUser_id(generateSequence(User.SEQUENCE_NAME));
 
-    public User register(User user) {
-        user.setUser_id(generateSequence(User.SEQUENCE_NAME));
-        user.setPassword(encoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
-
-        RegistrationMail registrationMail = new RegistrationMail();
-        registrationMail.setSubject("Registration Confirmation");
-        registrationMail.setName(savedUser.getFirstName() + " " + savedUser.getLastName());
-
-        try {
-            mailService.sendRegistrationEmail(
-                    savedUser.getEmail(),
-                    registrationMail,
-                    "registrationMailTemplate",
-                    new Context()
-            );
-        } catch (MessagingException e) {
-            System.out.println("Error sending registration email: " + e.getMessage());
-        
-        }
-
-        return savedUser;
-    }
 
     public User logout() {
         return null;
