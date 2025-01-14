@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.model.Comment;
 import com.example.backend.model.DatabaseSequence;
+import com.example.backend.model.User;
 import com.example.backend.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -52,6 +53,26 @@ public class CommentService {
         );
 
         commentRepository.deleteById(id);
+    }
+
+    public List<Comment> getCommentByPostId(String postId){
+        return commentRepository.getCommentByPostId(postId);
+    }
+
+    public Comment addLikes(String userId, String commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        comment.getLikedUsers().add(userId);
+        return commentRepository.save(comment);
+    }
+
+    public Comment removeLikes(String userId, String commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        comment.getLikedUsers().remove(userId);
+        return commentRepository.save(comment);
     }
 
     @Autowired

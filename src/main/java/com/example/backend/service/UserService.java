@@ -6,10 +6,6 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.model.RegistrationMail;
 import com.example.backend.model.User;
@@ -33,38 +29,18 @@ public class UserService {
     private MailService mailService;
 
     @Autowired
-    private JWTService jwtService;
-
-    @Autowired
-    private AuthenticationManager authmanager;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private MongoOperations mongoOperations;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
-
-    public String verify(User user) {
-
-            Authentication authentication = authmanager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-            );
-
-            if (authentication.isAuthenticated()) {
-                return jwtService.generateToken(user.getEmail());
-            } else {
-                return "Authentication failed";
-            }
-
-
-    }
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+
+    public User addUser(User user) {
+        user.setUser_id(generateSequence(User.SEQUENCE_NAME));
 
     public User register(User user) {
         user.setUser_id(generateSequence(User.SEQUENCE_NAME));
@@ -75,7 +51,19 @@ public class UserService {
         registrationMail.setSubject("Registration Confirmation");
         registrationMail.setName(savedUser.getFirstName() + " " + savedUser.getLastName());
 
-        return user;
+        try {
+            mailService.sendRegistrationEmail(
+                    savedUser.getEmail(),
+                    registrationMail,
+                    "registrationMailTemplate",
+                    new Context()
+            );
+        } catch (MessagingException e) {
+            System.out.println("Error sending registration email: " + e.getMessage());
+        
+        }
+
+        return savedUser;
     }
 
     public User logout() {
@@ -103,7 +91,7 @@ public class UserService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(encoder.encode(user.getPassword()));
+        existingUser.setPassword(user.getPassword());
         existingUser.setCaption(user.getCaption());
         existingUser.setUserImage(user.getUserImage());
         

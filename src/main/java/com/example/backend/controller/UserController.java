@@ -27,6 +27,16 @@ public class UserController {
     private UserRepository userRepository;
 
 
+    @PostMapping("/addUser")
+    public ResponseEntity<?> addUser(@RequestBody User user){
+        try {
+            User createdUser = userService.addUser(user);
+            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());
+        }}
+
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
 

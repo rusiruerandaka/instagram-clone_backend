@@ -101,7 +101,6 @@ public class PostService {
 
         postRepository.save(existingPost);
         return "Post updated successfully";
-
     }
 
 
