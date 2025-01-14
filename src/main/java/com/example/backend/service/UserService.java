@@ -42,6 +42,9 @@ public class UserService {
     public User addUser(User user) {
         user.setUser_id(generateSequence(User.SEQUENCE_NAME));
 
+    public User register(User user) {
+        user.setUser_id(generateSequence(User.SEQUENCE_NAME));
+        user.setPassword(encoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
 
         RegistrationMail registrationMail = new RegistrationMail();
@@ -62,6 +65,11 @@ public class UserService {
 
         return savedUser;
     }
+
+    public User logout() {
+        return null;
+    }
+
 
     public Optional<User> getUserById(String id){
 

@@ -27,7 +27,6 @@ public class UserController {
     private UserRepository userRepository;
 
 
-
     @PostMapping("/addUser")
     public ResponseEntity<?> addUser(@RequestBody User user){
         try {
@@ -38,6 +37,23 @@ public class UserController {
         }}
 
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+
+        User createduser = userService.register(user);
+        return new ResponseEntity<>(createduser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+
+        return userService.verify(user);
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "Logged out";
+    }
 
     @GetMapping("/getAllUsers")
     public List<User> getUser(){
