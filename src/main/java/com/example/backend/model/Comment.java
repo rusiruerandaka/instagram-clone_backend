@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -25,5 +26,6 @@ public class Comment {
     private String userId;
     private String postId;
     private String content;
+     private List<String> likedUsers;
     private String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 }

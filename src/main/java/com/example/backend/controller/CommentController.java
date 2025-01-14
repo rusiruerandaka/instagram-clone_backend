@@ -30,4 +30,30 @@ public class CommentController {
     public ResponseEntity<Comment> addComment(@RequestBody Comment comment){
         return new ResponseEntity<Comment>(commentService.addComment(comment), HttpStatus.CREATED);
     }
+
+    // Get Comments according to posts
+    @GetMapping("/getCommentByPostId/{postId}")
+    public List<Comment> getCommentByPostId(@PathVariable String postId){
+        return commentService.getCommentByPostId(postId);
+    }
+
+    @PostMapping("/addLikesComments/{userId}/{commentId}")
+    public ResponseEntity<?> addLikes(@PathVariable String userId, @PathVariable String commentId){
+        try {
+            Comment comment = commentService.addLikes(userId, commentId);
+            return ResponseEntity.ok(comment);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add likes: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/removeLikesComments/{userId}/{commentId}")
+    public ResponseEntity<?> removeLikes(@PathVariable String userId, @PathVariable String commentId){
+        try {
+            Comment comment = commentService.removeLikes(userId, commentId);
+            return ResponseEntity.ok(comment);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove likes: " + e.getMessage());
+        }
+    }
 }
