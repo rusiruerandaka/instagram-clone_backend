@@ -2,7 +2,6 @@ package com.example.backend.service;
 
 import com.example.backend.model.DatabaseSequence;
 import com.example.backend.repository.UserRepository;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
@@ -13,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.model.RegistrationMail;
 import com.example.backend.model.User;
-
-import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,10 +25,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 public class UserService {
-
-    @Autowired
-    private MailService mailService;
-
     @Autowired
     private JWTService jwtService;
 
