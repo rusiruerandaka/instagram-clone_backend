@@ -10,10 +10,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import com.example.backend.model.RegistrationMail;
 import com.example.backend.model.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -70,6 +72,27 @@ public class UserService {
 
         return user;
     }
+
+    public User registerOAuth2User(OAuth2User oauthUser) {
+        String userId = oauthUser.getAttribute("id");
+        String userName = oauthUser.getAttribute("name");
+
+
+        Optional<User> existingUser = userRepository.findById(userId);
+        if (existingUser.isPresent()) {
+          return existingUser.get();
+        }
+
+        // Register a new user
+        User user = new User();
+        user.setId(userId);
+        user.setName(userName);
+        userRepository.save(user);
+
+        
+        return user;
+    }
+
 
     public User logout() {
         return null;

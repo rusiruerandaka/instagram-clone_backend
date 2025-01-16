@@ -2,16 +2,21 @@ package com.example.backend.controller;
 
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.service.UserService;
+import com.example.backend.service.JWTService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 @RestController
 @CrossOrigin
@@ -26,6 +31,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JWTService jwtService;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
@@ -33,6 +41,31 @@ public class UserController {
         User createduser = userService.register(user);
         return new ResponseEntity<>(createduser, HttpStatus.CREATED);
     }
+
+    @GetMapping("/oauth2/login")
+    public ResponseEntity<?> handleOAuth2Login(@AuthenticationPrincipal OAuth2User oauthUser, HttpServletResponse response) {
+      if (oauthUser == null) {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2User not found");
+      }
+
+      Map<String, Object> attributes = oauthUser.getAttributes();
+      System.out.println("OAuth2User Attributes: " + attributes);
+ 
+      String id = (String) attributes.get("id");
+      String name = (String) attributes.get("name");
+
+      if (id == null || name == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID not found in OAuth2User attributes");
+      }
+
+      User user = userService.registerOAuth2User(oauthUser);
+
+      String jwtToken = jwtService.generateToken(user.getEmail());
+      response.addHeader("Authorization", "Bearer " + jwtToken);
+
+      return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
 
     @PostMapping("/login")
     public String login(@RequestBody User user) {
@@ -47,6 +80,13 @@ public class UserController {
     @GetMapping("/getAllUsers")
     public List<User> getUser(){
         return (List<User>) userService.getUser();
+    }
+
+    @GetMapping("/generateToken")
+    public String generateJwtToken(OAuth2User oauthUser) {
+    String email = oauthUser.getAttribute("email");
+    String jwtToken = jwtService.generateToken(email);
+    return jwtToken;
     }
 
     @GetMapping("/getUserById/{id}")

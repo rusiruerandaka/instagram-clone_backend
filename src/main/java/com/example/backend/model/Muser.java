@@ -16,10 +16,12 @@ public class Muser {
 
     private String firstName;
     private String lastName;
+    private String name;
     private String email;
     private String password;
     private String caption;
     private String userImage;
+    private String provider;
     private String followers[];
     private String following[];
     private List<String> likedPosts;
@@ -29,9 +31,11 @@ public class Muser {
         return "User{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", caption='" + caption + '\'' +
+                ", provider='" + provider + '\'' +
                 ", userImage='" + userImage + '\'' +
                 ", followers='" + followers + '\'' +
                 ", following='" + following + '\'' +
