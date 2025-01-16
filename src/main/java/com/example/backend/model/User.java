@@ -7,13 +7,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Document(collection = "user")
 public class User extends Muser{
 
     @Transient
@@ -21,6 +22,11 @@ public class User extends Muser{
 
     @Id
     private String user_id;
+    private String id;
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {
