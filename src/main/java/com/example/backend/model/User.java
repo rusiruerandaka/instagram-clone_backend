@@ -22,17 +22,14 @@ public class User extends Muser{
 
     @Id
     private String user_id;
-    private String id;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    
+
 
     @Override
-    public String toString() {
-        return "User{" +
-                "user_id='" + user_id + '\'' +
-                '}';
-    }
+public String toString() {
+    return super.toString() + ", user_id='" + user_id + '\'' + '}';
+}
+
 
 }
