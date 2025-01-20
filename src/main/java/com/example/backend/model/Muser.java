@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,7 +25,8 @@ public class Muser {
     private String provider;
     private String followers[];
     private String following[];
-    private List<String> likedPosts;
+    
+    private List<String> likedPosts = new ArrayList<>();
 
     @Override
     public String toString() {
