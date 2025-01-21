@@ -122,7 +122,6 @@ public class UserService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(encoder.encode(user.getPassword()));
         existingUser.setCaption(user.getCaption());
         existingUser.setUserImage(user.getUserImage());
         
