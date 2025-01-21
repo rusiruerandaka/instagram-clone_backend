@@ -111,7 +111,7 @@ public class UserController {
     }
 
     @GetMapping("/searchUser/{name}")
-    public List<User> searchUser(@RequestParam("name") String name){
+    public List<User> searchUser(@PathVariable("name") String name){
         return userRepository.findByFirstNameContainingIgnoreCase(name);
     }
 
