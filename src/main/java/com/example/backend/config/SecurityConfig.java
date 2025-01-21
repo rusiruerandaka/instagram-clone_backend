@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import java.util.Optional;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -100,15 +101,50 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests(authorize -> authorize
+                .requestMatchers("/users/login", "/users/register", "/users/oauth2/login", "/users/oauth2/login/fb").permitAll()
+                .anyRequest().authenticated()
+            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/users/oauth2/login") // Specify the custom OAuth2 login page
+                .successHandler((request, response, authentication) -> {
+                    OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+                    String id = oauthUser.getAttribute("id");
+                    String name = oauthUser.getAttribute("name"); // Extract the user's name or other attributes if needed
 
-        return http
-        .cors(c -> c.configurationSource(corsConfigurationSource()))
-        .csrf(customizer -> customizer.disable()).
-                authorizeHttpRequests(request -> request.requestMatchers("/users/login", "/users/register").permitAll()
-                        .anyRequest().authenticated()).httpBasic(Customizer.withDefaults()).
-                sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                    if (id != null) {
+                        // Check if the user already exists in the database
+                        Optional<User> existingUserOptional = userRepository.findByEmail(id);
+
+                        if (existingUserOptional.isEmpty()) {
+                            // Create a new user and save to the database
+                            User newUser = new User();
+                            newUser.setEmail(id);
+                            newUser.setFirstName(name); // Set additional attributes as necessary
+                            userRepository.save(newUser);
+                            System.out.println("New user saved to the database: " + id);
+                        }
+
+                        // Generate JWT
+                        String jwtToken = jwtService.generateToken(id);
+
+                        // Add JWT to response header
+                        response.addHeader("Authorization", "Bearer " + jwtToken);
+
+                        // Redirect after login
+                        response.sendRedirect("/users/oauth2/login/fb");
+                    } else {
+                        response.sendError(400, "Email not found in OAuth2User attributes");
+                    }
+                })
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Add custom JWT filter before UsernamePasswordAuthenticationFilter
+
+        return http.build();
     }
 
     @Bean

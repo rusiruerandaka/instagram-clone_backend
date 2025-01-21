@@ -74,19 +74,22 @@ public class UserService {
     }
 
     public User registerOAuth2User(OAuth2User oauthUser) {
-        String userId = oauthUser.getAttribute("id");
+
         String userName = oauthUser.getAttribute("name");
+        String email = oauthUser.getAttribute("email");;
 
 
-        Optional<User> existingUser = userRepository.findById(userId);
+        Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
-          return existingUser.get();
+            
+           return existingUser.get();
         }
 
         // Register a new user
         User user = new User();
-        user.setId(userId);
+        user.setUser_id(generateSequence(User.SEQUENCE_NAME)); // Consistent ID generation
         user.setName(userName);
+        user.setEmail(email); // Optional
         userRepository.save(user);
 
         
@@ -109,7 +112,7 @@ public class UserService {
     }
 
     public User getUserByEmail(String email){
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public User updateUser(String id, User user) {
@@ -138,7 +141,7 @@ public class UserService {
                 options().returnNew(true).upsert(true),
                 DatabaseSequence.class
         );
-        return "U" + (!Objects.isNull(counter) ? counter.getSeq() : 1);
+        return "U" + (counter != null ? counter.getSeq() : 1);
     }
 
 

@@ -42,29 +42,30 @@ public class UserController {
         return new ResponseEntity<>(createduser, HttpStatus.CREATED);
     }
 
-    @GetMapping("/oauth2/login")
+    @GetMapping("/oauth2/login/fb")
     public ResponseEntity<?> handleOAuth2Login(@AuthenticationPrincipal OAuth2User oauthUser, HttpServletResponse response) {
-      if (oauthUser == null) {
-          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2User not found");
-      }
-
-      Map<String, Object> attributes = oauthUser.getAttributes();
-      System.out.println("OAuth2User Attributes: " + attributes);
- 
-      String id = (String) attributes.get("id");
-      String name = (String) attributes.get("name");
-
-      if (id == null || name == null) {
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID not found in OAuth2User attributes");
-      }
-
-      User user = userService.registerOAuth2User(oauthUser);
-
-      String jwtToken = jwtService.generateToken(user.getEmail());
-      response.addHeader("Authorization", "Bearer " + jwtToken);
-
-      return new ResponseEntity<>(user, HttpStatus.CREATED);
+    if (oauthUser == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2User not found");
     }
+
+    Map<String, Object> attributes = oauthUser.getAttributes();
+    System.out.println("OAuth2User Attributes: " + attributes);
+
+    String name = (String) attributes.get("name");
+    String email = (String) attributes.get("email");
+
+    if (name == null || email == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name or email not found in OAuth2User attributes");
+    }
+
+    User user = userService.registerOAuth2User(oauthUser);
+
+    String jwtToken = jwtService.generateToken(user.getEmail());
+    response.addHeader("Authorization", "Bearer " + jwtToken);
+
+    return new ResponseEntity<>(user, HttpStatus.CREATED);
+}
+
 
 
     @PostMapping("/login")
@@ -101,8 +102,13 @@ public class UserController {
     }
 
     @GetMapping("/getUserByEmail/{email}")
-    public User findByEmail(@PathVariable String email){
-        return userRepository.findByEmail(email);
+    public ResponseEntity<?> findByEmail(@PathVariable String email){
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
     }
 
     @DeleteMapping("/deleteUser/{id}")
