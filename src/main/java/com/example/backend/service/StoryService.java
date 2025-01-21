@@ -8,9 +8,12 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -22,8 +25,15 @@ public class StoryService {
     @Autowired
     private StoryRepository storyRepository;
 
+        private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+
     public List<Story> getAllStories(){
-        return storyRepository.findAll();
+        LocalDateTime cutoffTime = LocalDateTime.now().minusHours(24);
+
+        return storyRepository.findAll().stream()
+                .filter(story -> LocalDateTime.parse(story.getDate(), DATE_FORMATTER).isAfter(cutoffTime))
+                .collect(Collectors.toList());
     }
 
     public Story getStoryById(String id){
