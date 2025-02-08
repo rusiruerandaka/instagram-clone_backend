@@ -131,6 +131,7 @@ public class UserController {
     public ResponseEntity<String[]> getFollowing(@PathVariable String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return ResponseEntity.ok(user.getFollowing());
+    }
 
     @PostMapping("/addLikes/{userId}/{postId}")
     public ResponseEntity<?> addLikes(@PathVariable String userId, @PathVariable String postId){
