@@ -54,6 +54,57 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    public String incrementLikes(String postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new RuntimeException(postId)
+        );
+
+        post.setLikeCount(post.getLikeCount() + 1);
+        postRepository.save(post);
+        return "Like Count Increased";
+    }
+
+    public String decrementLikes(String postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new RuntimeException(postId)
+        );
+
+        int likeCount = 0;
+        if(post.getLikeCount() == 0){
+            likeCount = 0;
+        } 
+        else{
+            likeCount = post.getLikeCount() - 1;
+        }
+
+        post.setLikeCount(likeCount);
+        postRepository.save(post);
+        return "Like Count Decreased";
+    }
+
+    public Integer getLikeCount(String postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new RuntimeException(postId)
+        );
+
+        return post.getLikeCount();
+    }
+
+    public String editPost(String id, Post post){
+        Post existingPost = postRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("Post not found")
+        );
+
+        existingPost.setUserId(post.getUserId() != null && !post.getUserId().isEmpty() ? post.getUserId() : existingPost.getUserId());
+        existingPost.setImageUrl(post.getImageUrl() != null && !post.getImageUrl().isEmpty() ? post.getImageUrl() : existingPost.getImageUrl());
+        existingPost.setDescription(post.getDescription() != null && !post.getDescription().isEmpty() ? post.getDescription() : existingPost.getDescription());
+
+        postRepository.save(existingPost);
+        return "Post updated successfully";
+
+    }
+
+
     @Autowired
     private MongoOperations mongoOperations;
 

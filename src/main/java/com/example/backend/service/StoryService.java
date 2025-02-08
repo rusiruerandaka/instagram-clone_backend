@@ -8,8 +8,12 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -21,8 +25,15 @@ public class StoryService {
     @Autowired
     private StoryRepository storyRepository;
 
+        private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+
     public List<Story> getAllStories(){
-        return storyRepository.findAll();
+        LocalDateTime cutoffTime = LocalDateTime.now().minusHours(24);
+
+        return storyRepository.findAll().stream()
+                .filter(story -> LocalDateTime.parse(story.getDate(), DATE_FORMATTER).isAfter(cutoffTime))
+                .collect(Collectors.toList());
     }
 
     public Story getStoryById(String id){
@@ -42,5 +53,28 @@ public class StoryService {
                 new Update().inc("seq",1), options().returnNew(true).upsert(true),
                 DatabaseSequence.class);
         return "S" + (!Objects.isNull(counter) ? counter.getSeq() : 1);
+    }
+
+    public boolean watchedStory(String id){
+        Optional<Story> optionalStory = storyRepository.findById(id);
+
+        if (optionalStory.isEmpty()) {
+            throw new IllegalArgumentException("Story with ID " + id + " does not exist.");
+        }
+
+        Story story = optionalStory.get();
+        story.setWatched(true);
+        storyRepository.save(story);
+
+        return true;
+    }
+
+    public String deleteStory(String id){
+        storyRepository.findById(id).orElseThrow(
+            () -> new RuntimeException(id)
+        );
+
+        storyRepository.deleteById(id);
+        return "Story deleted successfully";
     }
 }
