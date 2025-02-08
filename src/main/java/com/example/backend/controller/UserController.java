@@ -121,6 +121,17 @@ public class UserController {
         return userRepository.findByFirstNameContainingIgnoreCase(name);
     }
 
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity<String[]> getFollowers(@PathVariable String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(user.getFollowers());
+    }
+
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<String[]> getFollowing(@PathVariable String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(user.getFollowing());
+
     @PostMapping("/addLikes/{userId}/{postId}")
     public ResponseEntity<?> addLikes(@PathVariable String userId, @PathVariable String postId){
         try {
