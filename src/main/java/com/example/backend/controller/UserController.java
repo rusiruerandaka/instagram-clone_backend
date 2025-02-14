@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -152,4 +155,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove likes: " + e.getMessage());
         }
     }
+
+    @GetMapping("/getSavedPosts/{userId}")
+    public ResponseEntity<?> getSavedPosts(@PathVariable String userId){
+        try {
+            List<String> savedPosts = userService.getSavedPosts(userId);
+            return ResponseEntity.ok(savedPosts);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get saved posts: " + e.getMessage());
+        }
+    }
+    
 }

@@ -27,6 +27,7 @@ public class Muser {
     private String following[];
     
     private List<String> likedPosts = new ArrayList<>();
+    private List<String> savedPosts = new ArrayList<>();
 
     @Override
     public String toString() {
