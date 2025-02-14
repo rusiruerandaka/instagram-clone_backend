@@ -165,5 +165,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get saved posts: " + e.getMessage());
         }
     }
+
+    @PostMapping("/savePost/{userId}/{postId}")
+    public ResponseEntity<?> savePost(@PathVariable String userId, @PathVariable String postId){
+        try {
+            User user = userService.savePost(userId, postId);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save post: " + e.getMessage());
+        }
+    }
     
 }

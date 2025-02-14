@@ -174,4 +174,12 @@ public class UserService {
         );
         return user.getSavedPosts();
     }
+
+    public User savePost(String userId, String postId) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        user.getSavedPosts().add(postId);
+        return userRepository.save(user);
+    }
 }
