@@ -104,6 +104,10 @@ public class PostService {
 
     }
 
+    public List<Post> getPostIdByUserId(String userId){
+        return postRepository.findPostIdByUserId(userId);
+    }
+
 
     @Autowired
     private MongoOperations mongoOperations;

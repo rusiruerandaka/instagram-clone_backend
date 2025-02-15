@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @CrossOrigin
@@ -74,4 +76,10 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to edit post: " + e.getMessage());
         }
     }
+
+    @GetMapping("/getPostByUserId/{userId}")
+    public List<Post> getPostByUserId(@PathVariable String userId) {
+        return postService.getPostIdByUserId(userId);
+    }
+    
 }

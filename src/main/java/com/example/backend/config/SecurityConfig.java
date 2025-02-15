@@ -24,7 +24,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.JWTService;
-import org.springframework.security.config.Customizer;
 
 @EnableWebSecurity
 @Configuration
