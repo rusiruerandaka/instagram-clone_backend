@@ -23,8 +23,8 @@ public class Muser {
     private String caption;
     private String userImage;
     private String provider;
-    private String followers[];
-    private String following[];
+    private List<String> followers = new ArrayList<>();
+    private List<String> following = new ArrayList<>();
     
     private List<String> likedPosts = new ArrayList<>();
     private List<String> savedPosts = new ArrayList<>();

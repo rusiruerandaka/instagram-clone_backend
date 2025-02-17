@@ -31,17 +31,24 @@ public class StoryController {
         return new ResponseEntity<Story>(storyService.addStory(story), HttpStatus.CREATED);
     }
 
-    @PutMapping("/watchedStory/{id}")
-    public ResponseEntity<?> watchedStory(@PathVariable String id) {
-        try {
-            boolean updated = storyService.watchedStory(id);
-            return ResponseEntity.ok(updated);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+    @GetMapping("/watchedStory/{id}")
+    public ResponseEntity<?> getWatchedUsers(@PathVariable String id){
+        try{
+            return ResponseEntity.ok(storyService.getWatchedUsers(id));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get watched users: " + e.getMessage());
         }
     }
+
+    @PostMapping("/addWatchedUser/{storyId}/{userId}")
+    public ResponseEntity<?> addWatchedUsers(@PathVariable String storyId, @PathVariable String userId){
+        try{
+            return ResponseEntity.ok(storyService.addWatchedUser(storyId, userId));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add watched users: " + e.getMessage());
+        }
+    }
+    
 
     @DeleteMapping("/deleteStory/{id}")
     public ResponseEntity<?> deleteStory(@PathVariable String id){

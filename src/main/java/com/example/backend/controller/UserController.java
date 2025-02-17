@@ -125,13 +125,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/followers")
-    public ResponseEntity<String[]> getFollowers(@PathVariable String userId) {
+    public ResponseEntity<?> getFollowers(@PathVariable String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return ResponseEntity.ok(user.getFollowers());
     }
 
     @GetMapping("/{userId}/following")
-    public ResponseEntity<String[]> getFollowing(@PathVariable String userId) {
+    public ResponseEntity<?> getFollowing(@PathVariable String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return ResponseEntity.ok(user.getFollowing());
     }

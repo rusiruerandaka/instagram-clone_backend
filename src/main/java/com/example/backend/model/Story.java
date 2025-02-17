@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -27,7 +29,7 @@ public class Story {
 
     public String imageUrl;
     public int likeCount;
-    private boolean watched;    
+    private List<String> watchedUsers = new ArrayList<>();    
     private String description;
     private String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 }

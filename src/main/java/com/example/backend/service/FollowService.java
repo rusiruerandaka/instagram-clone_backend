@@ -17,17 +17,16 @@ public class FollowService implements FollowServiceInterface {
 
     @Override
     public User followUser(String userId, String followUserId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        User followUser = userRepository.findById(followUserId).orElseThrow(() -> new RuntimeException("User to follow not found"));
+        User user = userRepository.findById(userId).get();
+        User followUser = userRepository.findById(followUserId).get();
 
-        Set<String> following = new HashSet<>(Arrays.asList(user.getFollowing()));
-        Set<String> followers = new HashSet<>(Arrays.asList(followUser.getFollowers()));
-
+        Set<String> following = new HashSet<>(user.getFollowing());
         following.add(followUserId);
-        followers.add(userId);
+        user.setFollowing(Arrays.asList(following.toArray(new String[0])));
 
-        user.setFollowing(following.toArray(new String[0]));
-        followUser.setFollowers(followers.toArray(new String[0]));
+        Set<String> followers = new HashSet<>(followUser.getFollowers());
+        followers.add(userId);
+        followUser.setFollowers(Arrays.asList(followers.toArray(new String[0])));
 
         userRepository.save(user);
         userRepository.save(followUser);
@@ -37,17 +36,16 @@ public class FollowService implements FollowServiceInterface {
 
     @Override
     public User unfollowUser(String userId, String unfollowUserId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        User unfollowUser = userRepository.findById(unfollowUserId).orElseThrow(() -> new RuntimeException("User to unfollow not found"));
+        User user = userRepository.findById(userId).get();
+        User unfollowUser = userRepository.findById(unfollowUserId).get();
 
-        Set<String> following = new HashSet<>(Arrays.asList(user.getFollowing()));
-        Set<String> followers = new HashSet<>(Arrays.asList(unfollowUser.getFollowers()));
-
+        Set<String> following = new HashSet<>(user.getFollowing());
         following.remove(unfollowUserId);
-        followers.remove(userId);
+        user.setFollowing(Arrays.asList(following.toArray(new String[0])));
 
-        user.setFollowing(following.toArray(new String[0]));
-        unfollowUser.setFollowers(followers.toArray(new String[0]));
+        Set<String> followers = new HashSet<>(unfollowUser.getFollowers());
+        followers.remove(userId);
+        unfollowUser.setFollowers(Arrays.asList(followers.toArray(new String[0])));
 
         userRepository.save(user);
         userRepository.save(unfollowUser);

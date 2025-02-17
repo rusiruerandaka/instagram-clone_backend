@@ -54,19 +54,25 @@ public class StoryService {
                 DatabaseSequence.class);
         return "S" + (!Objects.isNull(counter) ? counter.getSeq() : 1);
     }
+    
+    public List<String> getWatchedUsers(String id){
+        Story story = storyRepository.findById(id).orElseThrow(
+            () -> new RuntimeException(id)
+        );
 
-    public boolean watchedStory(String id){
-        Optional<Story> optionalStory = storyRepository.findById(id);
+        return story.getWatchedUsers();
+    }
 
-        if (optionalStory.isEmpty()) {
-            throw new IllegalArgumentException("Story with ID " + id + " does not exist.");
-        }
+    public Story addWatchedUser(String id, String userId){
+        Story story = storyRepository.findById(id).orElseThrow(
+            () -> new RuntimeException(id)
+        );
 
-        Story story = optionalStory.get();
-        story.setWatched(true);
-        storyRepository.save(story);
+        List<String> watchedUsers = story.getWatchedUsers();
+        watchedUsers.add(userId);
+        story.setWatchedUsers(watchedUsers);
 
-        return true;
+        return storyRepository.save(story);
     }
 
     public String deleteStory(String id){
