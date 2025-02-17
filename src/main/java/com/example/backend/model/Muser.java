@@ -23,6 +23,8 @@ public class Muser {
     private String caption;
     private String userImage;
     private String provider;
+    private String slogan;
+    private String website;
     private List<String> followers = new ArrayList<>();
     private List<String> following = new ArrayList<>();
     

@@ -127,6 +127,12 @@ public class UserService {
         existingUser.setEmail(user.getEmail());
         existingUser.setCaption(user.getCaption());
         existingUser.setUserImage(user.getUserImage());
+        existingUser.setFollowers(user.getFollowers());
+        existingUser.setFollowing(user.getFollowing());
+        existingUser.setLikedPosts(user.getLikedPosts());
+        existingUser.setSavedPosts(user.getSavedPosts());
+        existingUser.setSlogan(user.getSlogan());
+        existingUser.setWebsite(user.getWebsite());
         
         return userRepository.save(existingUser);
     }
